@@ -5,7 +5,7 @@ import { VStack } from "@chakra-ui/layout";
 import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -15,7 +15,7 @@ const Login = () => {
   const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
 
-  const history = useHistory();
+  //const history = useHistory();
 
   const submitHandler = async () => {
     setLoading(true);
@@ -39,7 +39,7 @@ const Login = () => {
       };
 
       const { data } = await axios.post(
-        "/api/user/login",
+        "http://127.0.0.1:8000/api/user/login",
         { email, password },
         config
       );
@@ -53,7 +53,7 @@ const Login = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      history.push("/chats");
+      //history.push("/chats");
     } catch (error) {
       toast({
         title: "Error Occured!",
