@@ -60,7 +60,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
         },
         config
       );
-
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       setLoading(false);
