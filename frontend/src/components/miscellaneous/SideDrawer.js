@@ -76,10 +76,7 @@ function SideDrawer() {
         },
       };
 
-      const { data } = await axios.get(
-        `http://localhost:8000/api/user?search=${search}`,
-        config
-      );
+      const { data } = await axios.get(`/api/user?search=${search}`, config);
 
       setLoading(false);
       setSearchResult(data);
@@ -96,8 +93,6 @@ function SideDrawer() {
   };
 
   const accessChat = async (userId) => {
-    console.log(userId);
-
     try {
       setLoadingChat(true);
       const config = {
@@ -106,11 +101,7 @@ function SideDrawer() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(
-        `http://localhost:8000/api/chat`,
-        { userId },
-        config
-      );
+      const { data } = await axios.post(`/api/chat`, { userId }, config);
 
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data);
@@ -142,17 +133,17 @@ function SideDrawer() {
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button variant="ghost" onClick={onOpen}>
             <i className="fas fa-search"></i>
-            <Text d={{ base: "none", md: "flex" }} px={4}>
+            <Text display={{ base: "none", md: "flex" }} px={4}>
               Search User
             </Text>
           </Button>
         </Tooltip>
         <Text fontSize="2xl" fontFamily="Work sans">
-          Talk-A-Tive
+          Message Hust
         </Text>
         <div>
           <Menu>
-            <MenuButton p={1} style={{ position: "relative" }}>
+            <MenuButton p={1} marginRight={2} style={{ position: "relative" }}>
               <BellIcon fontSize="2xl" m={1} />
               <Badge
                 colorScheme="purple"

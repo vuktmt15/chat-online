@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -19,6 +20,10 @@ import { ChatState } from "../../Context/ChatProvider";
 import UserBadgeItem from "../UserAvatar/UserBadgeItem.js";
 import UserListItem from "../UserAvatar/UserListItem";
 
+import io from "socket.io-client";
+const ENDPOINT = "http://localhost:8000";
+var socket;
+
 const GroupChatModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState();
@@ -29,6 +34,11 @@ const GroupChatModal = ({ children }) => {
   const toast = useToast();
 
   const { user, chats, setChats } = ChatState();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    // eslint-disable-next-line
+  }, []);
 
   const handleGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
@@ -58,10 +68,11 @@ const GroupChatModal = ({ children }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log(data);
+      let { data } = await axios.get(`/api/user?search=${search}`, config);
       setLoading(false);
-      setSearchResult(data);
+      setSearchResult(
+        data.filter((u) => !selectedUsers.map((su) => su._id).includes(u._id))
+      );
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -79,6 +90,8 @@ const GroupChatModal = ({ children }) => {
   };
 
   const handleSubmit = async () => {
+    setSearchResult([]);
+    setSelectedUsers([]);
     if (!groupChatName || !selectedUsers) {
       toast({
         title: "Please fill all the feilds",
@@ -113,6 +126,10 @@ const GroupChatModal = ({ children }) => {
         isClosable: true,
         position: "bottom",
       });
+      socket.emit(
+        "update group",
+        selectedUsers.map((u) => u._id)
+      );
     } catch (error) {
       toast({
         title: "Failed to Create the Chat!",

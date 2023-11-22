@@ -41,7 +41,7 @@ const Signup = () => {
       });
       return;
     }
-    console.log(name, email, password, pic);
+
     try {
       const config = {
         headers: {
@@ -49,7 +49,7 @@ const Signup = () => {
         },
       };
       const { data } = await axios.post(
-        "http://127.0.0.1:8000/api/user",
+        "/api/user",
         {
           name,
           email,
@@ -58,7 +58,6 @@ const Signup = () => {
         },
         config
       );
-      console.log(data);
       toast({
         title: "Registration Successful",
         status: "success",
@@ -94,7 +93,7 @@ const Signup = () => {
       });
       return;
     }
-    console.log(pics);
+
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
@@ -107,11 +106,9 @@ const Signup = () => {
         .then((res) => res.json())
         .then((data) => {
           setPic(data.url.toString());
-          console.log(data.url.toString());
           setPicLoading(false);
         })
         .catch((err) => {
-          console.log(err);
           setPicLoading(false);
         });
     } else {
