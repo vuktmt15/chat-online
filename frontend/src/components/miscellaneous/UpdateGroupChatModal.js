@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconButton } from "@chakra-ui/button";
 import { ViewIcon } from "@chakra-ui/icons";
 import axios from "axios";
@@ -22,6 +22,10 @@ import { ChatState } from "../../Context/ChatProvider";
 import UserBadgeItem from "../UserAvatar/UserBadgeItem";
 import UserListItem from "../UserAvatar/UserListItem";
 
+import io from "socket.io-client";
+const ENDPOINT = "http://localhost:8000";
+var socket;
+
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState();
@@ -32,6 +36,10 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
   const toast = useToast();
   const { selectedChat, setSelectedChat, user } = ChatState();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+  }, []);
 
   const handleRemove = async (user1) => {
     if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
@@ -59,6 +67,10 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
           userId: user1._id,
         },
         config
+      );
+      socket.emit(
+        "update group",
+        selectedChat.users.map((u) => u._id).filter((u) => u !== user._id)
       );
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
@@ -95,10 +107,12 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
         config
       );
 
-      console.log(data._id);
+      socket.emit(
+        "update group",
+        selectedChat.users.map((u) => u._id)
+      );
       // setSelectedChat("");
       setSelectedChat(data);
-      setFetchAgain(!fetchAgain);
       setRenameLoading(false);
     } catch (error) {
       toast({
@@ -152,6 +166,8 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
         config
       );
 
+      socket.emit("update group", [user1._id]);
+
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       setLoading(false);
@@ -182,7 +198,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
         },
       };
       const { data } = await axios.get(`/api/user?search=${search}`, config);
-      console.log(data);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {

@@ -36,7 +36,7 @@ const Login = () => {
       };
 
       const { data } = await axios.post(
-        "http://127.0.0.1:8000/api/user/login",
+        "/api/user/login",
         { email, password },
         config
       );
@@ -99,17 +99,6 @@ const Login = () => {
         isLoading={loading}
       >
         Login
-      </Button>
-      <Button
-        variant="solid"
-        colorScheme="red"
-        width="100%"
-        onClick={() => {
-          setEmail("guest@example.com");
-          setPassword("123456");
-        }}
-      >
-        Get Guest User Credentials
       </Button>
     </VStack>
   );

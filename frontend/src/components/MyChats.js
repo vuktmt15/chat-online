@@ -9,15 +9,26 @@ import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 
+import io from "socket.io-client";
+const ENDPOINT = "http://localhost:8000";
+var socket;
+
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const {
+    selectedChat,
+    setSelectedChat,
+    user,
+    chats,
+    setChats,
+    notification,
+    setNotification,
+  } = ChatState();
 
   const toast = useToast();
 
   const fetchChats = async () => {
-    // console.log(user._id);
     try {
       const config = {
         headers: {
@@ -25,10 +36,7 @@ const MyChats = ({ fetchAgain }) => {
         },
       };
 
-      const { data } = await axios.get(
-        "http://localhost:8000/api/chat",
-        config
-      );
+      const { data } = await axios.get("/api/chat", config);
       setChats(data);
     } catch (error) {
       toast({
@@ -41,6 +49,16 @@ const MyChats = ({ fetchAgain }) => {
       });
     }
   };
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+  }, []);
+
+  useEffect(() => {
+    socket.on(`update_group_has_user_${user._id}`, () => {
+      window.location.reload();
+    });
+  });
 
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
@@ -94,7 +112,25 @@ const MyChats = ({ fetchAgain }) => {
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
-                onClick={() => setSelectedChat(chat)}
+                onClick={() => {
+                  setSelectedChat(chat);
+
+                  //Click on the group chat
+                  if (chat.users.length >= 3) {
+                    setNotification(
+                      notification.filter((n) => n.chat._id !== chat._id)
+                    );
+                  }
+
+                  //Click on the single chat
+                  if (chat.users.length < 3) {
+                    setNotification(
+                      notification.filter(
+                        (n) => n.sender._id !== chat.latestMessage.sender._id
+                      )
+                    );
+                  }
+                }}
                 cursor="pointer"
                 bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                 color={selectedChat === chat ? "white" : "black"}

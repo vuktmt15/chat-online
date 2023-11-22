@@ -60,6 +60,13 @@ io.on("connection", (socket) => {
     });
   });
 
+  //Socket io handle group
+  socket.on("update group", (users) => {
+    users.forEach((u) => {
+      io.emit(`update_group_has_user_${u}`);
+    });
+  });
+
   socket.off("setup", () => {
     console.log("USER DISCONNECTED");
     socket.leave(userData._id);
