@@ -26,9 +26,6 @@ server.listen(PORT, null, () => {
 // serve the landing page
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "www/index.html")));
 
-// serve the terms / legal page
-app.get("/legal", (req, res) => res.sendFile(path.join(__dirname, "www/legal.html")));
-
 // All other URL patterns will serve the app.
 app.get("/:room", (req, res) => res.sendFile(path.join(__dirname, "www/app.html")));
 
