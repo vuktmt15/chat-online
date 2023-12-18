@@ -1,5 +1,6 @@
 import { Avatar } from "@chakra-ui/avatar";
 import { Tooltip } from "@chakra-ui/tooltip";
+import moment from "moment";
 import ScrollableFeed from "react-scrollable-feed";
 import {
   isLastMessage,
@@ -43,6 +44,10 @@ const ScrollableChat = ({ messages }) => {
               }}
             >
               {m.content}
+              <br />
+              <i style={{ fontSize: "12px", opacity: 0.6 }}>
+                {moment(m.createdAt).format("HH:mm DD-MM-YYYY")}
+              </i>
             </span>
           </div>
         ))}
