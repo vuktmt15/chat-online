@@ -79,7 +79,10 @@ const MyChats = ({ fetchAgain }) => {
       >
         <Link to="/Metting" target="_blank" rel="noopener noreferrer">
           <Button
-          onClick={() => window.location.href = 'http://localhost:3000/'}
+            onClick={() =>
+              (window.location.href =
+                "https://chat-online-gr8s.onrender.com:3000")
+            }
             variant="outline"
             size="sm"
             fontSize={{ base: "12px", md: "14px", lg: "12px" }}
