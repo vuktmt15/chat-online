@@ -12,7 +12,7 @@ import io from "socket.io-client";
 import { Link } from "react-router-dom"; // Assuming you're using React Router for navigation
 import MeetingsComponent from "./MeetingsComponent"; // Import your Meetings component
 
-const ENDPOINT = "https://chat-online-gr8s.onrender.com:8000";
+const ENDPOINT = "http://localhost:8000";
 var socket;
 
 const MyChats = ({ fetchAgain }) => {
@@ -79,10 +79,7 @@ const MyChats = ({ fetchAgain }) => {
       >
         <Link to="/Metting" target="_blank" rel="noopener noreferrer">
           <Button
-            onClick={() =>
-              (window.location.href =
-                "https://chat-online-gr8s.onrender.com:3000")
-            }
+            onClick={() => (window.location.href = "http://localhost:3000")}
             variant="outline"
             size="sm"
             fontSize={{ base: "12px", md: "14px", lg: "12px" }}
