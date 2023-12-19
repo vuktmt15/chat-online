@@ -23,7 +23,7 @@ import UserBadgeItem from "../UserAvatar/UserBadgeItem";
 import UserListItem from "../UserAvatar/UserListItem";
 
 import io from "socket.io-client";
-const ENDPOINT = "http://localhost:8000";
+const ENDPOINT = "https://chat-online-gr8s.onrender.com:8000";
 var socket;
 
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
