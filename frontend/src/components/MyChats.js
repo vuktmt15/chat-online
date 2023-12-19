@@ -12,7 +12,7 @@ import io from "socket.io-client";
 import { Link } from "react-router-dom"; // Assuming you're using React Router for navigation
 import MeetingsComponent from "./MeetingsComponent"; // Import your Meetings component
 
-const ENDPOINT = "http://localhost:8000";
+const ENDPOINT = "https://chat-online-gr8s.onrender.com:8000";
 var socket;
 
 const MyChats = ({ fetchAgain }) => {
