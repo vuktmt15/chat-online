@@ -21,7 +21,7 @@ import UserBadgeItem from "../UserAvatar/UserBadgeItem.js";
 import UserListItem from "../UserAvatar/UserListItem";
 
 import io from "socket.io-client";
-const ENDPOINT = "https://chat-online-gr8s.onrender.com:8000";
+const ENDPOINT = "http://localhost:8000";
 var socket;
 
 const GroupChatModal = ({ children }) => {
